@@ -5,15 +5,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DAOUtilities {
 
-    private static DAOUtilities daoUtilities = new DAOUtilities();
+    //private static DAOUtilities daoUtilities = new DAOUtilities();
 
     private static Properties props = new Properties();
 
-    private DAOUtilities() {
+    public DAOUtilities() {
         super();
 
         try{
@@ -23,9 +24,9 @@ public class DAOUtilities {
         }
     }
 
-    public static DAOUtilities getInstance() {
+    /*public static DAOUtilities getInstance() {
         return daoUtilities;
-    }
+    }*/
 
     public static synchronized Connection getConnection() throws SQLException {
         Connection connection = null;
@@ -56,7 +57,6 @@ public class DAOUtilities {
                                                     props.getProperty("username"),
                                                     props.getProperty("password"));
         }
-        System.out.println("Connection obtained");
         return connection;
     }
 }

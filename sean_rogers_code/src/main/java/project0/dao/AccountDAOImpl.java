@@ -30,7 +30,7 @@ public class AccountDAOImpl {
 
         try{
             connection = DAOUtilities.getConnection();
-            String sql = "Select * from accounts";
+            String sql = "SELECT * FROM \"Project0\".accounts a2;";
             pstmt = connection.prepareStatement(sql);
 
             ResultSet rs = pstmt.executeQuery();
@@ -40,6 +40,8 @@ public class AccountDAOImpl {
 
                 account.setId(rs.getInt("id"));
                 account.setBalance(rs.getDouble("balance"));
+
+                accounts.add(account);
 
             }
 
@@ -54,6 +56,72 @@ public class AccountDAOImpl {
         return accounts;
     }
 
+    /**
+     * Retrieves the account specified by an id input
+     * @param id
+     * @return
+     */
+    public Account getAccountById(int id) {
+        Account account = null;
+
+        try {
+            connection = DAOUtilities.getConnection();
+            String sql = "SELECT * FROM \"Project0\".accounts a2 where id = ?;";
+            pstmt = connection.prepareStatement(sql);
+
+            pstmt.setInt(1, id);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                account = new Account();
+                account.setId(rs.getInt("id"));
+                account.setBalance(rs.getDouble("balance"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+
+        return account;
+    }
+
+    /**
+     * add new account to database and return the id of the new account
+     * @return
+     */
+    public int addAccount() {
+
+        try{
+            connection = DAOUtilities.getConnection();
+            String sql = "INSERT INTO \"Project0\".accounts (\"balance\") values (?) returning id;";
+            pstmt = connection.prepareStatement(sql);
+
+            pstmt.setDouble(1, 0.0);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt("id");
+            }
+
+            /*if(pstmt.executeUpdate() != 0) {
+                return true;
+            } else {
+                return false;
+            }*/
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            closeResources();
+        }
+        return 0;
+    }
+
 
     /**
      * close connection and preparedStatement
@@ -63,7 +131,7 @@ public class AccountDAOImpl {
             if (pstmt != null)
                 pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Could not close statement!");
+            System.err.println("Could not close statement!");
             e.printStackTrace();
         }
 
@@ -71,7 +139,7 @@ public class AccountDAOImpl {
             if (connection != null)
                 connection.close();
         } catch (SQLException e) {
-            System.out.println("Could not close connection!");
+            System.err.println("Could not close connection!");
             e.printStackTrace();
         }
     }
