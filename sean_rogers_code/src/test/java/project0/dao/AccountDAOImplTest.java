@@ -60,4 +60,10 @@ public class AccountDAOImplTest {
         //System.out.println(account);
         System.out.println("end test\n");
     }
+
+    @Test
+    public void updateAccountTest() {
+        Account account = new Account(3, 257.59);
+        adi.updateAccount(account);
+    }
 }

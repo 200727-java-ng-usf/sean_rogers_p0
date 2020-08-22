@@ -122,6 +122,36 @@ public class AccountDAOImpl {
         return 0;
     }
 
+    /**
+     * updates the account balance at the specified id
+     * @param account
+     * @return
+     */
+    public boolean updateAccount(Account account) {
+
+        try {
+            connection = DAOUtilities.getConnection();
+            String sql = "UPDATE \"Project0\".accounts SET \"balance\" = ? where id = ?;";
+            pstmt = connection.prepareStatement(sql);
+
+            pstmt.setDouble(1, account.getBalance());
+            pstmt.setInt(2, account.getId());
+
+            if(pstmt.executeUpdate() != 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeResources();
+        }
+
+    }
+
 
     /**
      * close connection and preparedStatement
