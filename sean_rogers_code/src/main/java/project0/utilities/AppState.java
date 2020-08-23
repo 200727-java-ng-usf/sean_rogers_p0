@@ -58,4 +58,8 @@ public class AppState {
     public void setAppRunning(boolean appRunning) {
         this.appRunning = appRunning;
     }
+
+    public boolean isSessionValid() {
+        return (this.currentUser != null);
+    }
 }

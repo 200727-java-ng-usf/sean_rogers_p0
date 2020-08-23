@@ -32,8 +32,19 @@ public class UserService {
                 throw new UsernameOrPasswordIncorrectException();
             }
         }
+    }
 
+    public void register(AppUser newUser) {
+        if (newUser == null || newUser.getUsername().equals("") || newUser.getPassword().equals("")) {
+            throw new RuntimeException("New User is null or username/password is empty");
+        }
 
+        AppUser userInDb = userDAO.getUserByUsername(newUser.getUsername());
+        if(userInDb != null) {
+            throw new RuntimeException("Username already taken");
+        }
+
+        userDAO.addUser(newUser);
     }
 
 }
