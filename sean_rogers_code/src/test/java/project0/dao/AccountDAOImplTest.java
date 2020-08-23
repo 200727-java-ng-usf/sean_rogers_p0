@@ -22,6 +22,7 @@ public class AccountDAOImplTest {
     @After
     public void teardown() {
         daou = null;
+        adi = null;
     }
 
     @Test
