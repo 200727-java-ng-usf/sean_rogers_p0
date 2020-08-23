@@ -1,5 +1,7 @@
 package project0.screens;
 
+import static project0.driver.ProjectDriver.app;
+
 public class HomeScreen extends Screen{
 
     public HomeScreen() {
@@ -13,12 +15,36 @@ public class HomeScreen extends Screen{
         System.out.println("2) Register");
         System.out.println("3) Exit Application");
 
-        try{
+        boolean runLoop = true;
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        while(runLoop){
 
-    }
+            try{
+                runLoop = false;
+                System.out.println("> ");
+                String userInput = app.getConsole().readLine();
+
+                switch (userInput) {
+                    case "1":
+                        app.getRouter().navigate("/login");
+                        break;
+                    case "2":
+                        app.getRouter().navigate("/register");
+                        break;
+                    case "3":
+                        app.setAppRunning(false);
+                        break;
+                    default:
+                        System.out.println("Invalid selection. Please try again");
+                        runLoop = true;
+                }
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
+        } //end loop
+
+    } //end render
 
 }
