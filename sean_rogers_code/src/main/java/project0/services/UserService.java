@@ -4,6 +4,7 @@ import project0.dao.UserDAOImpl;
 import project0.exceptions.UsernameOrPasswordIncorrectException;
 import project0.models.AppUser;
 
+import static project0.driver.ProjectDriver.app;
 
 
 /**
@@ -45,6 +46,7 @@ public class UserService {
         }
 
         userDAO.addUser(newUser);
+        app.setCurrentUser(newUser);
     }
 
 }

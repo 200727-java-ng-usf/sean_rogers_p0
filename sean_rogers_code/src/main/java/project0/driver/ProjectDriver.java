@@ -12,16 +12,12 @@ public class ProjectDriver {
 
     public static AppState app = new AppState();
 
+    public static DAOUtilities util = new DAOUtilities();
+
     public static void main(String[] args) {
 
-        DAOUtilities daou = new DAOUtilities();
-        AccountDAOImpl adi = new AccountDAOImpl();
-        List<Account> accountList = adi.getAccounts();
-
-        System.out.println(accountList.size());
-
-        for(int i = 0; i < accountList.size(); i++) {
-            System.out.println(accountList.get(i));
+        while(app.isAppRunning()) {
+            app.getRouter().navigate("/home");
         }
 
     }
