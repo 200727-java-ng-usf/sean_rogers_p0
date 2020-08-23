@@ -119,4 +119,19 @@ public class UserService {
 
     }
 
+    /**
+     * returns the balances of each account for the current user
+     * @return
+     */
+    public String getBalances() {
+        List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
+        StringBuilder accountsStringBuilder = new StringBuilder();
+
+        for(Account account : accounts) {
+            accountsStringBuilder.append("Account number " + account.getId() + ": " + account.getBalance() + "\n");
+        }
+
+        return accountsStringBuilder.toString();
+    }
+
 }

@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This model represents the association table relating users to accounts
+ */
 public class User_AccountDAOImpl {
 
     Connection connection = null;
@@ -32,7 +35,8 @@ public class User_AccountDAOImpl {
             String sql = "SELECT * FROM \"Project0\".accounts a " +
                     "join \"Project0\".users_accounts ua " +
                     "on a.id = ua.accountid " +
-                    "where userid = ?;";
+                    "where userid = ? " +
+                    "order by ua.accountid;";
             pstmt = connection.prepareStatement(sql);
 
             pstmt.setInt(1, appUser.getId());

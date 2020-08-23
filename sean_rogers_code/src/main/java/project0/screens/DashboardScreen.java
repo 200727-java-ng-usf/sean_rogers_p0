@@ -45,6 +45,12 @@ public class DashboardScreen extends Screen {
                         System.out.println("Enter account id");
                         account = Integer.parseInt(app.getConsole().readLine());
                         userService.withdrawFunds(Double.parseDouble(userInput), account);
+                        break;
+                    case "3":
+                        System.out.println(userService.getBalances());
+                        break;
+                    case "4":
+                        app.setCurrentUser(null);
                 }
 
             } catch (Exception e) {
