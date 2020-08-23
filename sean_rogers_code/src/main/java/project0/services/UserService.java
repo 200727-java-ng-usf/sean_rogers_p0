@@ -134,4 +134,10 @@ public class UserService {
         return accountsStringBuilder.toString();
     }
 
+    public void createNewAccount(AppUser appUser) {
+        int accountId = accountDAO.addAccount();
+        Account account = new Account(accountId, 0.0);
+        user_accountDAO.addUser_Account(appUser, account);
+    }
+
 }

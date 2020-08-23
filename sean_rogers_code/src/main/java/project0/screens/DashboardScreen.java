@@ -2,6 +2,8 @@ package project0.screens;
 
 import project0.services.UserService;
 
+import java.util.InputMismatchException;
+
 import static project0.driver.ProjectDriver.app;
 
 public class DashboardScreen extends Screen {
@@ -24,7 +26,8 @@ public class DashboardScreen extends Screen {
             System.out.println("1) Deposit funds into an account");
             System.out.println("2) Withdraw funds from an account");
             System.out.println("3) View the balance of your account(s)");
-            System.out.println("4) Sign out");
+            System.out.println("4) Create a new account");
+            System.out.println("5) Sign out");
 
             try {
                 System.out.println("> ");
@@ -50,9 +53,17 @@ public class DashboardScreen extends Screen {
                         System.out.println(userService.getBalances());
                         break;
                     case "4":
+                        userService.createNewAccount(app.getCurrentUser());
+                        break;
+                    case "5":
                         app.setCurrentUser(null);
+                        break;
+                    default:
+                        System.out.println("Invalid selection. Please try again");
                 }
 
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Please try again");
             } catch (Exception e) {
                 e.printStackTrace();
                 app.setAppRunning(false);
