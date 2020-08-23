@@ -7,6 +7,7 @@ import project0.exceptions.UsernameOrPasswordIncorrectException;
 import project0.models.Account;
 import project0.models.AppUser;
 import project0.models.User_Account;
+import project0.utilities.MethodLibrary;
 
 import java.util.List;
 
@@ -53,6 +54,12 @@ public class UserService {
         app.setCurrentUser(appUser);
     }
 
+    /**
+     * Provides the functionality for a new user registering for a new user login.
+     * It throws an exception if the user provided an empty username or password.
+     * It throws an exception if the user tries to register with a name already in the database
+     * @param newUser
+     */
     public void register(AppUser newUser) {
         if (newUser == null || newUser.getUsername().equals("") || newUser.getPassword().equals("")) {
             throw new RuntimeException("New User is null or username/password is empty");
@@ -67,6 +74,11 @@ public class UserService {
         app.setCurrentUser(newUser);
     }
 
+    /**
+     * deposits a user defined amount to the account with the accountId provided by the user
+     * @param amount
+     * @param accountId
+     */
     public void depositFunds(double amount, int accountId) {
 
         /*user_accountDAO = new User_AccountDAOImpl();
@@ -90,6 +102,13 @@ public class UserService {
 
     }
 
+    /**
+     * withdraws a user defined amount from the account specified by user
+     *
+     * throws an exception when the amount to withdraw is higher than the balance of the account
+     * @param amount
+     * @param accountId
+     */
     public void withdrawFunds(double amount, int accountId) {
 
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
@@ -127,13 +146,24 @@ public class UserService {
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
         StringBuilder accountsStringBuilder = new StringBuilder();
 
+        String accountBalanceCurrencyFormat;
+
         for(Account account : accounts) {
-            accountsStringBuilder.append("Account number " + account.getId() + ": " + account.getBalance() + "\n");
+            //convert double to currency format
+            accountBalanceCurrencyFormat = MethodLibrary.doubleToUSDFormat(account.getBalance());
+
+            //append each account number and balance to the stringBuilder
+            accountsStringBuilder.append("Account number " + account.getId() +
+                                ": " + accountBalanceCurrencyFormat + "\n");
         }
 
         return accountsStringBuilder.toString();
     }
 
+    /**
+     * creates a new money account
+     * @param appUser
+     */
     public void createNewAccount(AppUser appUser) {
         int accountId = accountDAO.addAccount();
         Account account = new Account(accountId, 0.0);

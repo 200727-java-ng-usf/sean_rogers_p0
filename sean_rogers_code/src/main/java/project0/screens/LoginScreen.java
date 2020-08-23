@@ -4,6 +4,9 @@ import project0.services.UserService;
 
 import static project0.driver.ProjectDriver.app;
 
+/**
+ * This screen provides the interface for a user to login
+ */
 public class LoginScreen extends Screen {
 
     private UserService userService;

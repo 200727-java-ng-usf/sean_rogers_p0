@@ -8,6 +8,9 @@ import project0.utilities.DAOUtilities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class runs the application
+ */
 public class ProjectDriver {
 
     public static AppState app = new AppState();

@@ -5,6 +5,9 @@ import project0.services.UserService;
 
 import static project0.driver.ProjectDriver.app;
 
+/**
+ * this screen provides the interface for the user to register a new login
+ */
 public class RegisterScreen extends Screen {
 
     private UserService userService;

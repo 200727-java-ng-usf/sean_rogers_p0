@@ -2,6 +2,9 @@ package project0.models;
 
 import java.util.Objects;
 
+/**
+ * Model for the account table
+ */
 public class Account {
 
     private int id;

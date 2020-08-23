@@ -6,6 +6,9 @@ import java.util.InputMismatchException;
 
 import static project0.driver.ProjectDriver.app;
 
+/**
+ * When a user is logged in, the dashboard screen is displayed with a handful of options
+ */
 public class DashboardScreen extends Screen {
 
     private UserService userService;

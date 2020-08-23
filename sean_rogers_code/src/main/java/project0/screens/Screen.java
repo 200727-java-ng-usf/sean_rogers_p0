@@ -1,5 +1,8 @@
 package project0.screens;
 
+/**
+ * all screens will inherit from this class
+ */
 public abstract class Screen {
 
     private String name;

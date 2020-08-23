@@ -2,6 +2,9 @@ package project0.screens;
 
 import static project0.driver.ProjectDriver.app;
 
+/**
+ * This is the screen that is displayed when the application is started or a user has just logged out
+ */
 public class HomeScreen extends Screen{
 
     public HomeScreen() {
