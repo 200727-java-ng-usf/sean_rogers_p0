@@ -61,15 +61,15 @@ public class UserDAOImpl {
      * @param id
      * @return
      */
-    public AppUser getUserById(int id) {
+    public AppUser getUserByUsername(String username) {
         AppUser appUser = null;
 
         try {
             connection = DAOUtilities.getConnection();
-            String sql = "SELECT * FROM \"Project0\".users where id = ?;";
+            String sql = "SELECT * FROM \"Project0\".users where username = ?;";
             pstmt = connection.prepareStatement(sql);
 
-            pstmt.setInt(1, id);
+            pstmt.setString(1, username);
 
             ResultSet rs = pstmt.executeQuery();
 

@@ -39,7 +39,7 @@ public class UserDAOImplTest {
 
     @Test
     public void ensureUserDAOImplGetUserWorks() {
-        AppUser appUser = udi.getUserById(1);
+        AppUser appUser = udi.getUserByUsername("seanrog1");
 
         System.out.println(appUser);
         System.out.println("end test\n");
@@ -47,7 +47,7 @@ public class UserDAOImplTest {
 
     @Test
     public void ensureUserDAOImplGetUserWorksWithNoUserFound() {
-        AppUser appUser = udi.getUserById(999);
+        AppUser appUser = udi.getUserByUsername("fakeseanrog");
 
         System.out.println(appUser);
         System.out.println("end test\n");
