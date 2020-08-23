@@ -21,8 +21,16 @@ public class UserService {
     private AccountDAOImpl accountDAO;
     private User_AccountDAOImpl user_accountDAO;
 
-    public UserService(UserDAOImpl dao){
-        userDAO = dao;
+    public UserService(UserDAOImpl udao){
+        userDAO = udao;
+        accountDAO = new AccountDAOImpl();
+        user_accountDAO = new User_AccountDAOImpl();
+    }
+
+    public UserService(UserDAOImpl udao, AccountDAOImpl adao, User_AccountDAOImpl uadao) {
+        this(udao);
+        accountDAO = adao;
+        user_accountDAO = uadao;
     }
 
     /**
@@ -61,8 +69,8 @@ public class UserService {
 
     public void depositFunds(double amount, int accountId) {
 
-        user_accountDAO = new User_AccountDAOImpl();
-        accountDAO = new AccountDAOImpl();
+        /*user_accountDAO = new User_AccountDAOImpl();
+        accountDAO = new AccountDAOImpl();*/
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
 
         boolean accountFound = false;
@@ -80,7 +88,34 @@ public class UserService {
             accountDAO.updateAccount(account);
         }
 
+    }
 
+    public void withdrawFunds(double amount, int accountId) {
+
+        List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
+
+        boolean accountFound = false;
+        for(Account account : accounts) {
+            if(account.getId() == accountId) {
+                accountFound = true;
+            }
+        }
+
+        // user isn't associated with the account specified by user
+        if(!accountFound) {
+            throw new RuntimeException("current user does not have account specified");
+        }
+
+        // user has account specified
+        Account account = accountDAO.getAccountById(accountId);
+
+        // ensure the balance is high enough for the withdrawal amount
+        if(account.getBalance() - amount < 0) {
+            throw new RuntimeException("Insufficient funds for withdrawal");
+        }
+
+        account.setBalance(account.getBalance() - amount);
+        accountDAO.updateAccount(account);
 
     }
 
