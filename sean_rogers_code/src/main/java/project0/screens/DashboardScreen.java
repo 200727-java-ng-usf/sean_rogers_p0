@@ -24,18 +24,27 @@ public class DashboardScreen extends Screen {
             System.out.println("1) Deposit funds into an account");
             System.out.println("2) Withdraw funds from an account");
             System.out.println("3) View the balance of your account(s)");
+            System.out.println("4) Sign out");
 
             try {
                 System.out.println("> ");
                 userInput = app.getConsole().readLine();
+                int account;
 
                 switch (userInput) {
                     case "1":
                         System.out.println("Enter amount to deposit");
                         userInput = app.getConsole().readLine();
                         System.out.println("Enter account id");
-                        int account = Integer.parseInt(app.getConsole().readLine());
+                        account = Integer.parseInt(app.getConsole().readLine());
                         userService.depositFunds(Double.parseDouble(userInput), account);
+                        break;
+                    case "2":
+                        System.out.println("Enter amount to withdraw");
+                        userInput = app.getConsole().readLine();
+                        System.out.println("Enter account id");
+                        account = Integer.parseInt(app.getConsole().readLine());
+                        userService.withdrawFunds(Double.parseDouble(userInput), account);
                 }
 
             } catch (Exception e) {

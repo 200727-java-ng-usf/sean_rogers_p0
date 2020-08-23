@@ -37,10 +37,12 @@ public class UserService {
         if(appUser == null) {
             throw new UsernameOrPasswordIncorrectException();
         } else {
-            if(appUser.getPassword() != password) {
+            if(!appUser.getPassword().equals(password)) {
                 throw new UsernameOrPasswordIncorrectException();
             }
         }
+
+        app.setCurrentUser(appUser);
     }
 
     public void register(AppUser newUser) {
@@ -58,6 +60,9 @@ public class UserService {
     }
 
     public void depositFunds(double amount, int accountId) {
+
+        user_accountDAO = new User_AccountDAOImpl();
+        accountDAO = new AccountDAOImpl();
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
 
         boolean accountFound = false;

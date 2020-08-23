@@ -1,5 +1,11 @@
 package project0.utilities;
 
+import project0.dao.AccountDAOImpl;
+import project0.dao.TransactionDAOImpl;
+import project0.dao.UserDAOImpl;
+import project0.dao.User_AccountDAOImpl;
+import project0.models.Transaction;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -58,5 +64,21 @@ public class DAOUtilities {
                                                     props.getProperty("password"));
         }
         return connection;
+    }
+
+    public static AccountDAOImpl getAccountDAOImpl() {
+        return new AccountDAOImpl();
+    }
+
+    public static TransactionDAOImpl getTransactionDAOImpl() {
+        return new TransactionDAOImpl();
+    }
+
+    public static UserDAOImpl getUserDAOImpl() {
+        return new UserDAOImpl();
+    }
+
+    public static User_AccountDAOImpl getUser_AccountDAOImpl() {
+        return new User_AccountDAOImpl();
     }
 }

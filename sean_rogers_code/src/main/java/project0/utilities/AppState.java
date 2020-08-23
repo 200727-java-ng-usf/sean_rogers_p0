@@ -4,6 +4,7 @@ import project0.dao.UserDAOImpl;
 import project0.models.AppUser;
 import project0.screens.DashboardScreen;
 import project0.screens.HomeScreen;
+import project0.screens.LoginScreen;
 import project0.screens.RegisterScreen;
 import project0.services.UserService;
 
@@ -28,7 +29,8 @@ public class AppState {
         router = new ScreenRouter();
         router.addScreen(new HomeScreen())
                 .addScreen(new RegisterScreen(userService))
-                .addScreen(new DashboardScreen());
+                .addScreen(new DashboardScreen(userService))
+                .addScreen(new LoginScreen(userService));
     }
 
     public BufferedReader getConsole() {
