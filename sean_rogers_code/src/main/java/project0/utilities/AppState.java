@@ -2,7 +2,9 @@ package project0.utilities;
 
 import project0.dao.UserDAOImpl;
 import project0.models.AppUser;
+import project0.screens.DashboardScreen;
 import project0.screens.HomeScreen;
+import project0.screens.RegisterScreen;
 import project0.services.UserService;
 
 import java.io.BufferedReader;
@@ -24,7 +26,9 @@ public class AppState {
         final UserService userService = new UserService(userDAOImpl);
 
         router = new ScreenRouter();
-        router.addScreen(new HomeScreen());
+        router.addScreen(new HomeScreen())
+                .addScreen(new RegisterScreen(userService))
+                .addScreen(new DashboardScreen());
     }
 
     public BufferedReader getConsole() {
