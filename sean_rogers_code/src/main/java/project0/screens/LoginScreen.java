@@ -22,25 +22,30 @@ public class LoginScreen extends Screen {
 
         String username;
         String password;
+        boolean runloop = true;
 
-        try {
+        while(runloop) {
+            try {
+                runloop = false;
+                System.out.println("Login in to Project0");
+                System.out.print("Username: ");
+                username = app.getConsole().readLine();
+                System.out.print("Password: ");
+                password = app.getConsole().readLine();
 
-            System.out.println("Login in to Project0");
-            System.out.print("Username: ");
-            username = app.getConsole().readLine();
-            System.out.print("Password: ");
-            password = app.getConsole().readLine();
+                userService.authenticate(username, password);
 
-            userService.authenticate(username, password);
+                if(app.isSessionValid()) {
+                    app.getRouter().navigate("/dashboard");
+                }
 
-            if(app.isSessionValid()) {
-                app.getRouter().navigate("/dashboard");
+            } catch(Exception e) {
+                runloop = true;
+                e.printStackTrace();
+                app.setAppRunning(false);
             }
-
-        } catch(Exception e) {
-            e.printStackTrace();
-            app.setAppRunning(false);
         }
+
 
     }
 

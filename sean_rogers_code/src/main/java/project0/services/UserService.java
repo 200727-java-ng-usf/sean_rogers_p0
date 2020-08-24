@@ -1,11 +1,13 @@
 package project0.services;
 
 import project0.dao.AccountDAOImpl;
+import project0.dao.TransactionDAOImpl;
 import project0.dao.UserDAOImpl;
 import project0.dao.User_AccountDAOImpl;
 import project0.exceptions.UsernameOrPasswordIncorrectException;
 import project0.models.Account;
 import project0.models.AppUser;
+import project0.models.Transaction;
 import project0.models.User_Account;
 import project0.utilities.MethodLibrary;
 
@@ -21,11 +23,13 @@ public class UserService {
     private UserDAOImpl userDAO;
     private AccountDAOImpl accountDAO;
     private User_AccountDAOImpl user_accountDAO;
+    private TransactionDAOImpl transactionDAO;
 
     public UserService(UserDAOImpl udao){
         userDAO = udao;
         accountDAO = new AccountDAOImpl();
         user_accountDAO = new User_AccountDAOImpl();
+        transactionDAO = new TransactionDAOImpl();
     }
 
     public UserService(UserDAOImpl udao, AccountDAOImpl adao, User_AccountDAOImpl uadao) {
@@ -98,6 +102,7 @@ public class UserService {
             Account account = accountDAO.getAccountById(accountId);
             account.setBalance(account.getBalance() + amount);
             accountDAO.updateAccount(account);
+            addTransaction(account, app.getCurrentUser(), amount);
         }
 
     }
@@ -135,6 +140,7 @@ public class UserService {
 
         account.setBalance(account.getBalance() - amount);
         accountDAO.updateAccount(account);
+        addTransaction(account, app.getCurrentUser(), -amount);
 
     }
 
@@ -160,6 +166,42 @@ public class UserService {
         return accountsStringBuilder.toString();
     }
 
+
+    public String getTransactionsForAccount(int accountId) {
+        List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
+
+        boolean accountFound = false;
+        for(Account account : accounts) {
+            if(account.getId() == accountId) {
+                accountFound = true;
+
+            }
+        }
+
+        // user isn't associated with the account specified by user
+        if(!accountFound) {
+            throw new RuntimeException("current user does not have account specified");
+        }
+
+        Account account = accountDAO.getAccountById(accountId);
+
+        List<Transaction> transactions = transactionDAO.getTransactionsBelongingToUser(app.getCurrentUser(), account);
+
+        StringBuilder transactionsStringBuilder = new StringBuilder();
+
+        String transactionBalanceCurrencyFormat;
+
+        for(Transaction transaction : transactions) {
+            //convert double to currency format then assign to transactionBalanceCurrencyFormat
+            transactionBalanceCurrencyFormat = MethodLibrary.doubleToUSDFormat(transaction.getAmount());
+
+            //append each account number and balance to the stringBuilder
+            transactionsStringBuilder.append("Transaction: " + transactionBalanceCurrencyFormat + "\n");
+        }
+
+        return transactionsStringBuilder.toString();
+    }
+
     /**
      * creates a new money account
      * @param appUser
@@ -168,6 +210,20 @@ public class UserService {
         int accountId = accountDAO.addAccount();
         Account account = new Account(accountId, 0.0);
         user_accountDAO.addUser_Account(appUser, account);
+    }
+
+    /**
+     * Every time a user deposits to or withdraws from an account, that is recorded in the database.
+     * @param account
+     * @param amount
+     */
+    private void addTransaction(Account account, AppUser appUser, double amount) {
+        Transaction transaction = new Transaction();
+        transaction.setAccountId(account.getId());
+        transaction.setUserId(appUser.getId());
+        transaction.setAmount(amount);
+
+        transactionDAO.addTransaction(transaction);
     }
 
 }

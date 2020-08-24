@@ -30,27 +30,28 @@ public class DashboardScreen extends Screen {
             System.out.println("2) Withdraw funds from an account");
             System.out.println("3) View the balance of your account(s)");
             System.out.println("4) Create a new account");
-            System.out.println("5) Sign out");
+            System.out.println("5) View transactions for an account");
+            System.out.println("6) Sign out");
 
             try {
                 System.out.println("> ");
                 userInput = app.getConsole().readLine();
-                int account;
+                int accountId;
 
                 switch (userInput) {
                     case "1":
                         System.out.println("Enter amount to deposit");
                         userInput = app.getConsole().readLine();
                         System.out.println("Enter account id");
-                        account = Integer.parseInt(app.getConsole().readLine());
-                        userService.depositFunds(Double.parseDouble(userInput), account);
+                        accountId = Integer.parseInt(app.getConsole().readLine());
+                        userService.depositFunds(Double.parseDouble(userInput), accountId);
                         break;
                     case "2":
                         System.out.println("Enter amount to withdraw");
                         userInput = app.getConsole().readLine();
                         System.out.println("Enter account id");
-                        account = Integer.parseInt(app.getConsole().readLine());
-                        userService.withdrawFunds(Double.parseDouble(userInput), account);
+                        accountId = Integer.parseInt(app.getConsole().readLine());
+                        userService.withdrawFunds(Double.parseDouble(userInput), accountId);
                         break;
                     case "3":
                         System.out.println(userService.getBalances());
@@ -59,6 +60,11 @@ public class DashboardScreen extends Screen {
                         userService.createNewAccount(app.getCurrentUser());
                         break;
                     case "5":
+                        System.out.println("Enter account id");
+                        accountId = Integer.parseInt(app.getConsole().readLine());
+                        System.out.println(userService.getTransactionsForAccount(accountId));
+                        break;
+                    case "6":
                         app.setCurrentUser(null);
                         break;
                     default:
