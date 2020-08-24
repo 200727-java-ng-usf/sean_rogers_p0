@@ -25,6 +25,11 @@ public class UserService {
     private User_AccountDAOImpl user_accountDAO;
     private TransactionDAOImpl transactionDAO;
 
+
+    /**
+     * initially, this was the only constructor
+     * @param udao
+     */
     public UserService(UserDAOImpl udao){
         userDAO = udao;
         accountDAO = new AccountDAOImpl();
@@ -32,10 +37,23 @@ public class UserService {
         transactionDAO = new TransactionDAOImpl();
     }
 
-    public UserService(UserDAOImpl udao, AccountDAOImpl adao, User_AccountDAOImpl uadao) {
+    /**
+     * this constructor was created to pass mocked DAOs as arguments for unit testing the service layer
+     *
+     * this reassigns the other DAOs when called
+     * @param udao
+     * @param adao
+     * @param uadao
+     * @param tdao
+     */
+    public UserService(UserDAOImpl udao,
+                       AccountDAOImpl adao,
+                       User_AccountDAOImpl uadao,
+                       TransactionDAOImpl tdao) {
         this(udao);
         accountDAO = adao;
         user_accountDAO = uadao;
+        transactionDAO = tdao;
     }
 
     /**
