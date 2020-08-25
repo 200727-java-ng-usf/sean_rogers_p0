@@ -94,7 +94,7 @@ public class UserService {
             throw new UsernameAlreadyTakenException();
         }
 
-        userDAO.addUser(newUser);
+        newUser.setId(userDAO.addUser(newUser));
         app.setCurrentUser(newUser);
     }
 

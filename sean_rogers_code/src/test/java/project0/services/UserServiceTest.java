@@ -20,6 +20,9 @@ import java.util.List;
 
 import static project0.driver.ProjectDriver.app;
 
+/**
+ * test class that tests the methods in UserService
+ */
 public class UserServiceTest {
 
     private UserDAOImpl mockUserDAO = Mockito.mock(UserDAOImpl.class);

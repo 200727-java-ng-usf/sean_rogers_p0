@@ -41,7 +41,7 @@ public class LoginScreen extends Screen {
                 }
 
             } catch(UsernameOrPasswordIncorrectException e) {
-                System.out.println("Username or password incorrect.");
+                System.out.println("Username or password incorrect.\n");
             }
 
             catch(Exception e) {

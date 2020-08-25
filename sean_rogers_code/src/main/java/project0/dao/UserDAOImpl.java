@@ -58,7 +58,7 @@ public class UserDAOImpl {
 
     /**
      * Retrieves the user specified by an id input
-     * @param id
+     * @param username
      * @return
      */
     public AppUser getUserByUsername(String username) {
@@ -93,25 +93,33 @@ public class UserDAOImpl {
      * add a new user to database
      * @return
      */
-    public boolean addUser(AppUser appUser) {
+    public int addUser(AppUser appUser) {
 
         try{
             connection = DAOUtilities.getConnection();
-            String sql = "INSERT INTO \"Project0\".users (\"username\", \"password\") values (?, ?)";
+            String sql = "INSERT INTO \"Project0\".users (\"username\", \"password\") values (?, ?) returning id";
             pstmt = connection.prepareStatement(sql);
 
             pstmt.setString(1, appUser.getUsername());
             pstmt.setString(2, appUser.getPassword());
 
-            if(pstmt.executeUpdate() != 0) {
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt("id");
+            } else {
+                return 0;
+            }
+
+            /*if(pstmt.executeUpdate() != 0) {
                 return true;
             } else {
                 return false;
-            }
+            }*/
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return 0;
         } finally {
             closeResources();
         }

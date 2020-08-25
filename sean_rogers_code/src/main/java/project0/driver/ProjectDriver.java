@@ -19,6 +19,7 @@ public class ProjectDriver {
 
     public static void main(String[] args) {
 
+        System.out.println("Welcome to the SeanRog BanksR us of America!\n");
         while(app.isAppRunning()) {
             app.getRouter().navigate("/home");
         }
