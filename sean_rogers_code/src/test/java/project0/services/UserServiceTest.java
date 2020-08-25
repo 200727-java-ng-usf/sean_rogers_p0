@@ -10,7 +10,7 @@ import project0.dao.TransactionDAOImpl;
 import project0.dao.UserDAOImpl;
 import project0.dao.User_AccountDAOImpl;
 import project0.driver.ProjectDriver;
-import project0.exceptions.UsernameOrPasswordIncorrectException;
+import project0.exceptions.*;
 import project0.models.Account;
 import project0.models.AppUser;
 import project0.models.Transaction;
@@ -80,12 +80,12 @@ public class UserServiceTest {
 
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = EmptyUsernameOrPasswordException.class)
     public void userNameOrPasswordIsEmptyString() {
         sut.register(new AppUser("","",1));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = UsernameAlreadyTakenException.class)
     public void userNameAlreadyInDb() {
         Mockito.when(mockUserDAO.getUserByUsername(Mockito.anyString())).thenReturn(new AppUser());
         sut.register(new AppUser("Mockito","rules!",1));
@@ -97,7 +97,7 @@ public class UserServiceTest {
         assert (ProjectDriver.app.getCurrentUser().getId() == 1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AccountNotFoundException.class)
     public void depositFundsAccountNotFound() {
 
         AppUser appUser = new AppUser();
@@ -129,7 +129,7 @@ public class UserServiceTest {
         assert(sut.depositFunds(5, 3));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AccountNotFoundException.class)
     public void withdraw5NoAccountFound() {
         AppUser appUser = new AppUser();
         List<Account> accounts = new ArrayList<>();
@@ -157,7 +157,7 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(5, 3));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = InsufficientFundsException.class)
     public void withdraw50NoFromAccount3InsufficientFunds() {
         AppUser appUser = new AppUser();
         appUser.setId(1);
@@ -205,7 +205,7 @@ public class UserServiceTest {
         assert(sut.getBalances().equals(expectedOutput));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AccountNotFoundException.class)
     public void getTransactionsForAccount4NoAccountFound() {
         AppUser appUser = new AppUser();
         List<Account> accounts = new ArrayList<>();
