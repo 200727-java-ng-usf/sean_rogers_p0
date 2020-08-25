@@ -66,6 +66,7 @@ public class DashboardScreen extends Screen {
                         break;
                     case "6":
                         app.setCurrentUser(null);
+                        app.getRouter().navigate("/home");
                         break;
                     default:
                         System.out.println("Invalid selection. Please try again");
