@@ -101,10 +101,8 @@ public class UserService {
      * @param amount
      * @param accountId
      */
-    public void depositFunds(double amount, int accountId) {
+    public boolean depositFunds(double amount, int accountId) {
 
-        /*user_accountDAO = new User_AccountDAOImpl();
-        accountDAO = new AccountDAOImpl();*/
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
 
         boolean accountFound = false;
@@ -122,7 +120,7 @@ public class UserService {
             accountDAO.updateAccount(account);
             addTransaction(account, app.getCurrentUser(), amount);
         }
-
+        return true;
     }
 
     /**
@@ -132,7 +130,7 @@ public class UserService {
      * @param amount
      * @param accountId
      */
-    public void withdrawFunds(double amount, int accountId) {
+    public boolean withdrawFunds(double amount, int accountId) {
 
         List<Account> accounts = user_accountDAO.getAccountsBelongingToUser(app.getCurrentUser());
 
@@ -159,7 +157,7 @@ public class UserService {
         account.setBalance(account.getBalance() - amount);
         accountDAO.updateAccount(account);
         addTransaction(account, app.getCurrentUser(), -amount);
-
+        return true;
     }
 
     /**

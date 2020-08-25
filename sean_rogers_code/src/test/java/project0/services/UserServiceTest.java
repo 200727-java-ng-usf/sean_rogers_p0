@@ -11,7 +11,14 @@ import project0.dao.UserDAOImpl;
 import project0.dao.User_AccountDAOImpl;
 import project0.driver.ProjectDriver;
 import project0.exceptions.UsernameOrPasswordIncorrectException;
+import project0.models.Account;
 import project0.models.AppUser;
+import project0.models.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static project0.driver.ProjectDriver.app;
 
 public class UserServiceTest {
 
@@ -89,5 +96,152 @@ public class UserServiceTest {
         sut.register(new AppUser("ThisIs", "Valid:)", 1));
         assert (ProjectDriver.app.getCurrentUser().getId() == 1);
     }
+
+    @Test(expected = RuntimeException.class)
+    public void depositFundsAccountNotFound() {
+
+        AppUser appUser = new AppUser();
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        sut.depositFunds(5, 4);
+
+
+    }
+
+    @Test
+    public void deposit5ToAccount3() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        ProjectDriver.app.setCurrentUser(appUser);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+
+        assert(sut.depositFunds(5, 3));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void withdraw5NoAccountFound() {
+        AppUser appUser = new AppUser();
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+        assert(sut.withdrawFunds(5, 4));
+    }
+
+    @Test
+    public void withdraw5NoFromAccount3() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        ProjectDriver.app.setCurrentUser(appUser);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+        assert(sut.withdrawFunds(5, 3));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void withdraw50NoFromAccount3InsufficientFunds() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        ProjectDriver.app.setCurrentUser(appUser);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+        assert(sut.withdrawFunds(50, 3));
+    }
+
+    @Test
+    public void withdraw5NoFromAccount3InsufficientFunds() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        ProjectDriver.app.setCurrentUser(appUser);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+        assert(sut.withdrawFunds(5, 3));
+    }
+
+    @Test
+    public void getBalanceForUser1() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        ProjectDriver.app.setCurrentUser(appUser);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        String expectedOutput = "Account number 1: $2.20\nAccount number 2: $45.30\nAccount number 3: $49.09\n";
+        assert(sut.getBalances().equals(expectedOutput));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getTransactionsForAccount4NoAccountFound() {
+        AppUser appUser = new AppUser();
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+        assert(sut.withdrawFunds(5, 4));
+    }
+
+    @Test
+    public void getTransactionsForAccount3() {
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("testUser");
+        appUser.setPassword("testUserPassword");
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(1, 2.2));
+        accounts.add(new Account(2, 45.3));
+        accounts.add(new Account(3, 49.09));
+        List<Transaction> t = new ArrayList<>();
+        app.setCurrentUser(appUser);
+        t.add(new Transaction(25.6, 1, 3));
+        t.add(new Transaction(-43.2, 1, 3));
+        t.add(new Transaction(15.52, 1, 3));
+        Mockito.when(mockTransactionDAO
+                .getTransactionsBelongingToUser(app.getCurrentUser(), accounts.get(2)))
+                .thenReturn(t);
+
+        Mockito.when(mockUser_accountDAO.getAccountsBelongingToUser(appUser)).thenReturn(accounts);
+        Mockito.when(mockAccountDAO.getAccountById(3)).thenReturn(accounts.get(2));
+
+        String expectedOutput = "Transaction: $25.60\nTransaction: -$43.20\nTransaction: $15.52\n";
+        assert(sut.getTransactionsForAccount(3).equals(expectedOutput));
+    }
+
 
 }
