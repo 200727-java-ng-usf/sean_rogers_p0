@@ -101,6 +101,7 @@ public class UserServiceTest {
     public void depositFundsAccountNotFound() {
 
         AppUser appUser = new AppUser();
+        app.setCurrentUser(appUser);
         List<Account> accounts = new ArrayList<>();
         accounts.add(new Account(1, 2.2));
         accounts.add(new Account(2, 45.3));
@@ -132,6 +133,7 @@ public class UserServiceTest {
     @Test(expected = AccountNotFoundException.class)
     public void withdraw5NoAccountFound() {
         AppUser appUser = new AppUser();
+        app.setCurrentUser(appUser);
         List<Account> accounts = new ArrayList<>();
         accounts.add(new Account(1, 2.2));
         accounts.add(new Account(2, 45.3));
@@ -208,6 +210,7 @@ public class UserServiceTest {
     @Test(expected = AccountNotFoundException.class)
     public void getTransactionsForAccount4NoAccountFound() {
         AppUser appUser = new AppUser();
+        app.setCurrentUser(appUser);
         List<Account> accounts = new ArrayList<>();
         accounts.add(new Account(1, 2.2));
         accounts.add(new Account(2, 45.3));
