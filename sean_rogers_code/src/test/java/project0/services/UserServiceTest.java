@@ -96,7 +96,16 @@ public class UserServiceTest {
 
     @Test
     public void validRegistrationTest() {
+
+        AppUser appUser = new AppUser();
+        appUser.setId(1);
+        appUser.setUsername("ThisIs");
+        appUser.setPassword("Valid:)");
+
+        Mockito.when(mockUserDAO.getUserByUsername(Mockito.anyString())).thenReturn(null);
+        Mockito.when(mockUserDAO.addUser(appUser)).thenReturn(1);
         sut.register(new AppUser("ThisIs", "Valid:)", 1));
+        app.setCurrentUser(appUser);
         assert (ProjectDriver.app.getCurrentUser().getId() == 1);
     }
 
