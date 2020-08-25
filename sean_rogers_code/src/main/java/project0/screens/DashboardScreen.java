@@ -1,5 +1,7 @@
 package project0.screens;
 
+import project0.exceptions.AccountNotFoundException;
+import project0.exceptions.InsufficientFundsException;
 import project0.services.UserService;
 
 import java.util.InputMismatchException;
@@ -74,6 +76,10 @@ public class DashboardScreen extends Screen {
 
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Please try again");
+            } catch (AccountNotFoundException e) {
+                System.out.println("You don't have the account you specified");
+            } catch (InsufficientFundsException e) {
+                System.out.println("You don't have enough money in the account to withdraw the amount you specified");
             } catch (Exception e) {
                 e.printStackTrace();
                 app.setAppRunning(false);

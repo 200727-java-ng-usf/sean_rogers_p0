@@ -1,5 +1,6 @@
 package project0.screens;
 
+import project0.exceptions.UsernameOrPasswordIncorrectException;
 import project0.services.UserService;
 
 import static project0.driver.ProjectDriver.app;
@@ -39,7 +40,11 @@ public class LoginScreen extends Screen {
                     app.getRouter().navigate("/dashboard");
                 }
 
-            } catch(Exception e) {
+            } catch(UsernameOrPasswordIncorrectException e) {
+                System.out.println("Username or password incorrect.");
+            }
+
+            catch(Exception e) {
                 runloop = true;
                 e.printStackTrace();
                 app.setAppRunning(false);

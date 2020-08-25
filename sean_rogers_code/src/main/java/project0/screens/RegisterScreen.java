@@ -1,5 +1,7 @@
 package project0.screens;
 
+import project0.exceptions.EmptyUsernameOrPasswordException;
+import project0.exceptions.UsernameAlreadyTakenException;
 import project0.models.AppUser;
 import project0.services.UserService;
 
@@ -40,7 +42,13 @@ public class RegisterScreen extends Screen {
                 app.getRouter().navigate("/dashboard");
             }
 
-        } catch(Exception e) {
+        } catch(EmptyUsernameOrPasswordException e) {
+            System.out.println("You must type something in for both the username and password");
+        } catch(UsernameAlreadyTakenException e) {
+            System.out.println("That username has already been taken");
+        }
+
+        catch(Exception e) {
             e.printStackTrace();
         }
 
