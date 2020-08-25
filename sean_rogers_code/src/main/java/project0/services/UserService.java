@@ -4,7 +4,7 @@ import project0.dao.AccountDAOImpl;
 import project0.dao.TransactionDAOImpl;
 import project0.dao.UserDAOImpl;
 import project0.dao.User_AccountDAOImpl;
-import project0.exceptions.UsernameOrPasswordIncorrectException;
+import project0.exceptions.*;
 import project0.models.Account;
 import project0.models.AppUser;
 import project0.models.Transaction;
@@ -84,12 +84,14 @@ public class UserService {
      */
     public void register(AppUser newUser) {
         if (newUser == null || newUser.getUsername().equals("") || newUser.getPassword().equals("")) {
-            throw new RuntimeException("New User is null or username/password is empty");
+            throw new EmptyUsernameOrPasswordException();
         }
 
         AppUser userInDb = userDAO.getUserByUsername(newUser.getUsername());
+
+        //username already taken
         if(userInDb != null) {
-            throw new RuntimeException("Username already taken");
+            throw new UsernameAlreadyTakenException();
         }
 
         userDAO.addUser(newUser);
@@ -113,7 +115,8 @@ public class UserService {
         }
 
         if(!accountFound) {
-            throw new RuntimeException("current user does not have account specified");
+            //user does not have specified account
+            throw new AccountNotFoundException();
         } else {
             Account account = accountDAO.getAccountById(accountId);
             account.setBalance(account.getBalance() + amount);
@@ -143,7 +146,7 @@ public class UserService {
 
         // user isn't associated with the account specified by user
         if(!accountFound) {
-            throw new RuntimeException("current user does not have account specified");
+            throw new AccountNotFoundException();
         }
 
         // user has account specified
@@ -151,7 +154,7 @@ public class UserService {
 
         // ensure the balance is high enough for the withdrawal amount
         if(account.getBalance() - amount < 0) {
-            throw new RuntimeException("Insufficient funds for withdrawal");
+            throw new InsufficientFundsException();
         }
 
         account.setBalance(account.getBalance() - amount);
@@ -196,7 +199,7 @@ public class UserService {
 
         // user isn't associated with the account specified by user
         if(!accountFound) {
-            throw new RuntimeException("current user does not have account specified");
+            throw new AccountNotFoundException();
         }
 
         Account account = accountDAO.getAccountById(accountId);
