@@ -32,11 +32,17 @@ public class UserServiceTest {
 
     UserService sut;
 
+    /**
+     * Setup the UserService as the software undertest
+     */
     @Before
     public void setup() {
         sut = new UserService(mockUserDAO, mockAccountDAO, mockUser_accountDAO, mockTransactionDAO);
     }
 
+    /**
+     * Set all objects to null
+     */
     @After
     public void tearDown() {
         sut = null;
@@ -46,6 +52,9 @@ public class UserServiceTest {
         mockUserDAO = null;
     }
 
+    /**
+     * Try to login as a user that doesn't exist
+     */
     @Test(expected = UsernameOrPasswordIncorrectException.class)
     public void authenticateWithUsernameNotFound() {
 
@@ -58,6 +67,9 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * try to login as a user that exists but provided the wrong password
+     */
     @Test(expected = UsernameOrPasswordIncorrectException.class)
     public void authenticateWithUsernameFoundButPasswordWrong() {
 
@@ -70,6 +82,9 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * login as a user that exists and with the correct password
+     */
     @Test
     public void authenticateWithValidCredentials() {
 
@@ -83,17 +98,26 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * try to register a user with no username or password provided
+     */
     @Test(expected = EmptyUsernameOrPasswordException.class)
     public void userNameOrPasswordIsEmptyString() {
         sut.register(new AppUser("","",1));
     }
 
+    /**
+     * try to register a user that provided a username that already exists
+     */
     @Test(expected = UsernameAlreadyTakenException.class)
     public void userNameAlreadyInDb() {
         Mockito.when(mockUserDAO.getUserByUsername(Mockito.anyString())).thenReturn(new AppUser());
         sut.register(new AppUser("Mockito","rules!",1));
     }
 
+    /**
+     * register a user that provided a username that doesn't already exist
+     */
     @Test
     public void validRegistrationTest() {
 
@@ -109,6 +133,9 @@ public class UserServiceTest {
         assert (ProjectDriver.app.getCurrentUser().getId() == 1);
     }
 
+    /**
+     * try to deposit funds to an account that's not associated with the user
+     */
     @Test(expected = AccountNotFoundException.class)
     public void depositFundsAccountNotFound() {
 
@@ -124,6 +151,9 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * deposit $5.00 to account 3
+     */
     @Test
     public void deposit5ToAccount3() {
         AppUser appUser = new AppUser();
@@ -142,6 +172,9 @@ public class UserServiceTest {
         assert(sut.depositFunds(5, 3));
     }
 
+    /**
+     * try to withdraw from an account not associated with the user
+     */
     @Test(expected = AccountNotFoundException.class)
     public void withdraw5NoAccountFound() {
         AppUser appUser = new AppUser();
@@ -155,6 +188,9 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(5, 4));
     }
 
+    /**
+     * withdraw $5.00 from account 3
+     */
     @Test
     public void withdraw5NoFromAccount3() {
         AppUser appUser = new AppUser();
@@ -171,6 +207,9 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(5, 3));
     }
 
+    /**
+     * try to withdraw more money than what's in the account
+     */
     @Test(expected = InsufficientFundsException.class)
     public void withdraw50NoFromAccount3InsufficientFunds() {
         AppUser appUser = new AppUser();
@@ -187,6 +226,9 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(50, 3));
     }
 
+    /**
+     * withdraw 5.00 from account 3
+     */
     @Test
     public void withdraw5NoFromAccount3InsufficientFunds() {
         AppUser appUser = new AppUser();
@@ -203,6 +245,9 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(5, 3));
     }
 
+    /**
+     * get balance for user1
+     */
     @Test
     public void getBalanceForUser1() {
         AppUser appUser = new AppUser();
@@ -219,6 +264,9 @@ public class UserServiceTest {
         assert(sut.getBalances().equals(expectedOutput));
     }
 
+    /**
+     * get transactions for an account not associated with current user
+     */
     @Test(expected = AccountNotFoundException.class)
     public void getTransactionsForAccount4NoAccountFound() {
         AppUser appUser = new AppUser();
@@ -232,6 +280,9 @@ public class UserServiceTest {
         assert(sut.withdrawFunds(5, 4));
     }
 
+    /**
+     * get transactions for account3
+     */
     @Test
     public void getTransactionsForAccount3() {
         AppUser appUser = new AppUser();

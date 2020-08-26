@@ -12,6 +12,10 @@ public class MethodLibrary {
      */
     public static String doubleToUSDFormat(double num) {
 
+        if(num == 0) {
+            return "$0.00";
+        }
+
         boolean isNegative = false;
         if(num < 0) {
             num *= -1;
@@ -21,6 +25,7 @@ public class MethodLibrary {
         int intNum = (int)(num * 100);
         StringBuilder sb = new StringBuilder();
         int count = 0;
+
 
         while(intNum > 0) {
             if(count == 2) {
